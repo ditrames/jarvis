@@ -11,87 +11,106 @@ import time
 import imaplib, email
 import webbrowser
 import pyttsx3
+import threading
 
-def jarvis(x, y, z, print1, complile_code, **kwargs):
-        car = True
-        vcd = ""
-        while car:
-            if list(z)[len(list(z))-1] != " ":  z += " "
-            if complile_code:   vcd += str(list(z)) + z+ "\n\n"
-            z = z.lower().replace("=\r\n", " ").replace("\r\n", " ").replace("=e2=80=99", "'")
-            if print1:  print("list input", list(z))
-            if complile_code:   vcd += "list input"+str(list(z))+"\n\n"
-            if print1:  print("loop inpput var z ",z)
-            if complile_code:   vcd += "loop inpput var z " + z+ "\n\n"
-            text = z.split("jarvis ", 1)
-            if print1:  print("loop split jarvis list var text", text)
-            if complile_code:   vcd += "loop split jarvis list var text" + str(text) + "\n\n"
-            print(z)
-            if len(text) == 2:
-                z = text[1]
-                if text[len(text)-1] == " " or text[len(text)-1] == "":
-                    return 0
-                snob = text[1]
-                if print1:  print("command and text after jarvis var snob ",snob)
-                if complile_code:   vcd += "command and text after jarvis var snob " + snob + "\n\n"
-                braker = False
-                if print1:  print("diffrent commads linked to functions var x",x)
-                if complile_code:   vcd += "diffrent commads linked to functions var x" + str(x) + "\n\n"
-                command = 0
-                for i in x:
-                    command += 1
-                    if print1:  print("diffrent ways the command could be said var i ", i)
-                    if complile_code:   vcd += "diffrent ways the command could be said var i "+ str(i) + "\n\n"
-                    for q in i:
-                        if print1:  print("the commands as string var q ", q)
-                        if complile_code:   vcd += "the commands as string var q " + str(q) + "\n\n"
-                        if q+" " in snob:
-                            braker = True
-                            bcd = snob.split(q, 1)[1].split("jarvis ", 1)[0]
-                            if print1:  print("text ofter extraction var snob after split",bcd, "\n\n")
-                            if complile_code:   vcd += "text ofter extraction var snob after split" + str(bcd) + "\n\n"
-                            if print1:  print("extracted text",bcd)
-                            if complile_code:   vcd += "extracted text" + str(bcd) + "\n\n"
-                            print(command)
-                            y[command-1](bcd, kwargs)
-                            z = snob.split(q, 1)[1]
-                        if braker:
-                            break
-                    if braker:
-                        break
-            else:
-                car = False
-        return vcd
-
-def send_mail(fromaddr, toaddr, body):
-        print("sending bounce back email")
-        msg = MIMEMultipart()
-        msg['From'] = fromaddr
-        msg['To'] = toaddr
-        msg['Subject'] = "automated bounce back"
-        msg.attach(MIMEText(body, 'plain'))
-        server = smtplib.SMTP('smtp.gmail.com', 587)
-        server.ehlo()
-        server.starttls()
-        server.ehlo()
-        b = True
-        while b:
-            try:
-                server.login("jarvisbackchat@gmail.com", "Pickles123505992299505321123505992")
-                text = msg.as_string()
-                server.sendmail(fromaddr, toaddr, text)
-                b = False
-            except:
-                pass
-        print("mail sent")
-
+def delay_function(command):
+    print("start")
+    try:
+        command, delay_time = command.lower().split()[-2:]
+    except:
+        return
+    try:
+        delay_time = int(delay_time)
+    except:
+        return 0
+    if command == "delay":
+        time.sleep(delay_time)
+    print("done")
 class main:
-    # jarvis
-    def jarvis_strip(x, y, z, print1, complile_code):
-        jarvis(x, y, z, print1, complile_code)
+
+    def __init__(self):
+        pass
+
+    def search_algorithm(self, commands, functions, command_string, command_start, delay_function=delay_function):
+        print(command_string)
+        command_position = []
+        for command in range(len(commands)):
+            for command_str in range(len(commands[command])):
+                position = 0
+                next_cheack_position = 0
+                current_search_command = f"jarvis {commands[command][command_str]}"
+                while position != -1:
+                    position = command_string.find(current_search_command, next_cheack_position)
+                    next_cheack_position = position+1
+                    if position != -1:
+                        command_position.append(
+                            [
+                                command,
+                                command_str,
+                                [
+                                    position,
+                                    (position+len(current_search_command))
+                                ]
+                            ]
+                        )
+        currected_list = []
+        sorted_list = [None]*len(command_position)
+
+        gide_list_endpoint= [sum(i[2]) for i in command_position]
+        gide_list_startpoint= [sum(i[2]) for i in command_position]
+        gide_list_endpoint.sort()
+
+        for position in range(len(command_position)):
+            index = gide_list_endpoint.index(gide_list_startpoint[position])
+            sorted_list[index] = command_position[position]
+        
+        for items in range(len(sorted_list)):
+            strip_position_1 = sorted_list[items][2][1]
+            try:
+                strip_position_2 = sorted_list[items+1][2][0]
+                sorted_list[items].append(command_string[strip_position_1:strip_position_2])
+            except:
+                sorted_list[items].append(command_string[strip_position_1:])
+        print(sorted_list)
+        def function_runner(command, function):
+            print(command)
+            delay_function(command)
+            function(command)
+
+        for command_data in sorted_list:
+            fucnction_to_run = functions[command_data[0]]
+            string_after_command = command_data[3]
+            thread = threading.Thread(target=function_runner, args=(string_after_command, fucnction_to_run))
+            thread.start()
 
 
-    def read_mail(commands, functions):
+
+
+    def speach_get(self, time_len):
+        data = ""
+        r = sr.Recognizer()
+        r.dynamic_energy_threshold = True
+        print(sr.Microphone.list_microphone_names())
+        print("Speak:")
+        
+        try:
+            with sr.Microphone(sample_rate = 20000, chunk_size = 2048) as d:
+                audio = r.listen(d, phrase_time_limit=time_len)
+            print("done")
+        except Exception as e:
+            print(e)
+            print("sorry")
+            
+        try:
+            data = r.recognize_google(audio)
+            print("You said " + data)
+        except sr.UnknownValueError:
+            print("Could not understand audio")
+        except sr.RequestError as e:
+            print("Could not request results; {0}".format(e))
+        return data
+
+    def read_mail(self, commands, functions):
         do = True
         
         try:
@@ -130,59 +149,40 @@ class main:
                                     print(do)
                                     print(email_message['From'].split("<", 1)[1].split(">"))
                             except:
-                                pass
-                            
-                            try:
-                                jarvis(commands, functions, do, True, True)
-                            except Exception as e:
-                                print(str(e))
-                                print(email_message['From'])
-                                try:
-                                    send_mail("jarvisbackchat@gmail.com", email_message['From'].split("<", 1)[1].split(">")[0], jarvis(commands, functions, do, True, True))
-                                except:
-                                    try:
-                                        send_mail("jarvisbackchat@gmail.com", email_message['From'], jarvis(commands, functions, do, True, True))#
-                                    except:
-                                        jarvis(commands, functions, do, True, True)
-                                        try:          
-                                            send_mail("jarvisbackchat@gmail.com", email_message['From'].split("<", 1)[1].split(">")[0], "and error has ecord")
-                                        except:
-                                            try:
-                                                send_mail("jarvisbackchat@gmail.com", email_message['From'], "error error err... *silent explotion sound* max:'wtf'*max screeming in the distance*")
-                                            except:
-                                                pass
-                 
-                      
+                                pass         
             m.close()   
             m.logout()
             with open("backchatmail.txt", "w") as opener:
                 zd = bent[0].split()
                 opener.write(str(len(bent[0].split())+1))   
+            return do
 
-    # def connect_to_usb(*usb):
-            
-    #     return ser
+    def send_mail(self, toaddr, body):
+        print("sending bounce back email")
+        msg = MIMEMultipart()
+        msg['From'] = fromaddr
+        msg['To'] = toaddr
+        msg['Subject'] = "automated bounce back"
+        msg.attach(MIMEText(body, 'plain'))
+        server = smtplib.SMTP('smtp.gmail.com', 587)
+        server.ehlo()
+        server.starttls()
+        server.ehlo()
+        b = True
+        while b:
+            try:
+                server.login("jarvisbackchat@gmail.com", "Pickles123505992299505321123505992")
+                text = msg.as_string()
+                server.sendmail("jarvisbackchat@gmail.com", toaddr, text)
+                b = False
+            except:
+                pass
+        print("mail sent")
 
-    def speach_get(time_len):
-        data = ""
-        r = sr.Recognizer()
-        r.dynamic_energy_threshold = True
-        print(sr.Microphone.list_microphone_names())
-        print("Speak:")
-        
-        try:
-            with sr.Microphone(sample_rate = 20000, chunk_size = 2048) as d:
-                audio = r.listen(d, phrase_time_limit=time_len)
-            print("done")
-        except Exception as e:
-            print(e)
-            print("sorry")
-            
-        try:
-            data = r.recognize_google(audio)
-            print("You said " + data)
-        except sr.UnknownValueError:
-            print("Could not understand audio")
-        except sr.RequestError as e:
-            print("Could not request results; {0}".format(e))
-        return data
+def frog(x):
+    print("frogger", x)
+
+if __name__ == "__main__":
+    jarvis = main()
+    
+    jarvis.search_algorithm([["leave", "goodbye"]], [frog], "jarvis leave pog delay 5", "jarvis")

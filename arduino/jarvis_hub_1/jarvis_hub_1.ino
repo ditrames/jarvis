@@ -29,10 +29,8 @@ const uint16_t other_node = 00;       // Address of the other node in Octal form
 
 const unsigned long interval = 2000; //ms  // How often to send 'hello world to the other unit
 
-unsigned long last_sent;             // When did we last send?
-unsigned long packets_sent;          // How many have we sent already
 
-String testd = "br hub 01 all ";
+String testd = "br hub 01 all";
 char string[32] = "";
 
 void setup(void)
@@ -43,8 +41,8 @@ void setup(void)
   printf_begin();
   radio.begin(); 
   network.begin(/*channel*/ 90, /*node address*/ this_node);
-  radio.setDataRate( RF24_2MBPS );
-  radio.setPALevel(RF24_PA_MIN);
+  radio.setDataRate( RF24_2MBPS);
+  radio.setPALevel(RF24_PA_LOW);
   radio.printDetails();
   for(int i = 0; i < 2; i++){
     Serial.print("Sending...");
@@ -52,10 +50,12 @@ void setup(void)
     testd += random(0, 10);
     testd.toCharArray(string, 32);
     bool ok = network.write(header,&string,sizeof(string));
-    if (ok)
+    if (ok){
       Serial.println("ok.");
-    else
+      break;
+    } else {
       Serial.println("failed.");
+    }
   }
 }
 
