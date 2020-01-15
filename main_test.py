@@ -13,5 +13,5 @@ in_commands = False
 
 jarvis = jarvis.main()
 while True:
-    data = jarvis.speach_get(15)
-    print(jarvis.search_algorithm(commands, functions, "jarvis say testtest", "jarvis"))
+    data = jarvis.speach_get(15).lower()
+    print(jarvis.search_algorithm(commands, functions, data, "jarvis"))

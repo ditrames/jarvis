@@ -72,6 +72,7 @@ class main:
             except:
                 sorted_list[items].append(command_string[strip_position_1:])
         print(sorted_list)
+        
         def function_runner(command, function):
             print(command)
             delay_function(command)
