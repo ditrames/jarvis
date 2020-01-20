@@ -180,10 +180,5 @@ class main:
                 pass
         print("mail sent")
 
-def frog(x):
-    print("frogger", x)
-
 if __name__ == "__main__":
-    jarvis = main()
-    
-    jarvis.search_algorithm([["leave", "goodbye"]], [frog], "jarvis leave pog delay 5", "jarvis")
+    pass
