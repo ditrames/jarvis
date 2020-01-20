@@ -13,5 +13,6 @@ in_commands = False
 
 jarvis = jarvis.main()
 while True:
-    data = jarvis.speach_get(15).lower()
-    print(jarvis.search_algorithm(commands, functions, data, "jarvis"))
+    for command_data, args in [[jarvis.read_mail, []], [jarvis.speach_get, [15]]]
+        data = command_data(*args).lower()
+        print(jarvis.search_algorithm(commands, functions, data, "jarvis"))
