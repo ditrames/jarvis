@@ -111,7 +111,7 @@ class main:
             print("Could not request results; {0}".format(e))
         return data
 
-    def read_mail(self, commands, functions):
+    def read_mail(self):
         do = True
         
         try:
