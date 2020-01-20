@@ -3,8 +3,6 @@ import serial
 import time
 import pyttsx3
 
-print(dir(funcs.functions))
-
 functions = funcs.functions
 
 commands = funcs.commands

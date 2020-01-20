@@ -14,7 +14,6 @@ import pyttsx3
 import threading
 
 def delay_function(command):
-    print("start")
     try:
         command, delay_time = command.lower().split()[-2:]
     except:
@@ -25,14 +24,12 @@ def delay_function(command):
         return 0
     if command == "delay":
         time.sleep(delay_time)
-    print("done")
 class main:
 
     def __init__(self):
         pass
 
     def search_algorithm(self, commands, functions, command_string, command_start, delay_function=delay_function):
-        print(command_string)
         command_position = []
         for command in range(len(commands)):
             for command_str in range(len(commands[command])):
@@ -71,10 +68,9 @@ class main:
                 sorted_list[items].append(command_string[strip_position_1:strip_position_2])
             except:
                 sorted_list[items].append(command_string[strip_position_1:])
-        print(sorted_list)
+
         
         def function_runner(command, function):
-            print(command)
             delay_function(command)
             function(command)
 
@@ -119,7 +115,6 @@ class main:
             m.login("jarvisbackchat@gmail.com","Pickles123505992299505321123505992")
             m.select("inbox")
         except Exception as e:
-            print("ive gone wrong ", e)
             return None
             do=False
         if do:
@@ -130,7 +125,6 @@ class main:
                     prev = int(i)
             if result == 'OK':
                 for num in bent[0].split()[prev-1:]:
-                    print(int(num))
                     if int(num) > prev:
                         
                         result, data = m.uid('fetch', num, '(RFC822)')
@@ -144,10 +138,8 @@ class main:
                             try:
                                 try:
                                     do = email_message.get_payload()[ 0 ].get_payload()
-                                    print(do)
                                 except:
                                     do = email_message.get_payload()
-                                    print(do)
                                     print(email_message['From'].split("<", 1)[1].split(">"))
                             except:
                                 pass         
@@ -159,7 +151,6 @@ class main:
             return do
 
     def send_mail(self, toaddr, body):
-        print("sending bounce back email")
         msg = MIMEMultipart()
         msg['From'] = fromaddr
         msg['To'] = toaddr
@@ -178,7 +169,6 @@ class main:
                 b = False
             except:
                 pass
-        print("mail sent")
 
 if __name__ == "__main__":
     pass
