@@ -1,3 +1,3 @@
-imports/jarvis/__pycache__/__init__.cpython-37.pyc
+*.cpython-37.pyc
 imports_old/
 backchatmail.txt
