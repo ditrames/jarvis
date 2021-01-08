@@ -1,16 +1,17 @@
-from imports import jarvis, funcs
-import serial
+from home_assistant import HomeAssistant, Mail, Speach
+from commands import command_relations
 import time
-import pyttsx3
 
-functions = funcs.functions
+mailbox = Mail('jarvisbackchat@gmail.com', 'JARVIS_EMAIL_PASSWORD')
+speach = Speach(10)
+jarvis = HomeAssistant.from_command_relations('(gary|garry)', command_relations)
+while 1:
+    mail = mailbox.read_mail()
+    print(mail)
+    parsed_string = jarvis.parse_string(mail)
+    jarvis.run_commands(parsed_string)
 
-commands = funcs.commands
-
-in_commands = False
-
-jarvis = jarvis.main()
-while True:
-    for command_data, args in [[jarvis.read_mail, []], [jarvis.speach_get, [15]]]
-        data = command_data(*args).lower()
-        print(jarvis.search_algorithm(commands, functions, data, "jarvis"))
+    speach_out = speach.recognise_speach()
+    print(speach_out)
+    parsed_string = jarvis.parse_string(speach_out)
+    jarvis.run_commands(parsed_string)

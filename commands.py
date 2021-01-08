@@ -1,0 +1,107 @@
+import webbrowser as wbrowser
+import pyttsx3
+import time
+# core jarvis funcs
+# antidisestablishmemtariamism
+# antidisestablishmemtarianism
+# antidisestablishmentarianism
+
+
+class Browser:
+    chrome_path = '/usr/bin/google-chrome-stable  %s --incognito'
+
+    def __init__(self):
+        self.browser = wbrowser
+        self.incogneto_browser = wbrowser.get(self.chrome_path)
+        self.incogneto = False
+
+    def open(self, path):
+        if self.incogneto:
+            self.incogneto_browser.open(path)
+        else:
+            self.browser.open(path)
+
+
+webbrowser = Browser()
+
+
+def say_str(x, rate=200):
+    print("im saying")
+    x = x.replace(" ", "", 1)
+    print(x)
+    try:
+        engine = pyttsx3.init()
+        engine.setProperty("rate", 100)
+        engine.say(x)
+        engine.runAndWait()
+    except:
+        pass
+
+
+def incogneto(x):
+    if 'on' in x:
+        webbrowser.incogneto = True
+
+    elif 'off' in x:
+        webbrowser.incogneto = False
+    incogneto_val = 'on' if webbrowser.incogneto else 'off'
+    say_str(f'incogneto is now {incogneto_val}')
+
+
+def google(x):
+    x = x.replace(" ", "", 1)
+    webbrowser.open("https://www.google.com/search?source=hp&ei=wki6W44di8quBJ6og8AD&q={}&oq={}&gs_l=psy-ab.3..0i8i13i30k1l5.2206.3696.0.3945.11.10.0.0.0.0.143.1116.2j8.10.0....0...1c.1.64.psy-ab..1.10.1114.0..0j0i131k1j0i131i67k1j0i67k1j0i10k1j0i13k1j0i22i30k1.0.UGF2ylGfAX4".format(x, x))
+
+
+def go_to_website(x):
+    x = x.replace(" ", "", 1)
+    webbrowser.open(str(x))
+
+
+def yahoo_run(x):
+    x = x.replace(" ", "", 1)
+    webbrowser.open("https://uk.search.yahoo.com/search?p={}&fr=yfp-t-903-s&fp=1&toggle=1&cop=mss&ei=UTF-8".format(x))
+
+
+def youtube_run(x):
+    x = x.replace(" ", "", 1)
+    webbrowser.open("https://www.youtube.com/results?search_query={}".format(x))
+
+
+def dprint(x):
+    webbrowser.open("http://octopi.local/")
+
+
+def cancer(x):
+    webbrowser.open("https://www.bodmincollege.co.uk/")
+
+
+def wikihow(x):
+    webbrowser.open(f"https://www.wikihow.com/wikiHowTo?search={x}")
+
+
+def spell_func(x):
+    x = x[1:]
+    letters = list(x)
+    for i in range(0, len(letters), 3):
+        letter1 = letters[i]
+        letter2 = letters[i+1] if i+1 < len(letters) else ''
+        letter3 = letters[i+2] if i+2 < len(letters) else ''
+        say_str(f'{letter1}.{letter2}.{letter3}', 100)
+        time.sleep(0.9)
+
+
+youtube = ["search youtube for"]  # jarvis search youtube for x
+webcommand = ["google"]  # jarvis google x
+yahoo = ["have a look on yahoo for", "search yahoo for", "ask yahoo for", "search yahoo", "ask yahoo", "yahoo it"]
+goto_website = ["go to website url", "go to web url", "go to"]  # jarvis goto website http://chatsterio.co.uk
+saystuff = ["say", "speak aloud"]  # jarvis say x
+dprinter = ["open 3d printer", "open octoprint"]
+cancer_can = ["open cancer"]  # jarvis open cancer
+wikk = ["search wikihow"]
+spell = ['spell', 'how do you spell']
+incogneto_words = ['turn incognito']
+commands = [webcommand, goto_website, saystuff, yahoo, youtube, dprinter, cancer_can, wikk, spell, incogneto_words]
+functions = [google, go_to_website, say_str, yahoo_run, youtube_run, dprint, cancer, wikihow, spell_func, incogneto]
+
+command_relations = zip(commands, functions)
